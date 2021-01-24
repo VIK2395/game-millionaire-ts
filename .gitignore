@@ -11,6 +11,12 @@
 # production
 /build
 
+# webstorm settings
+.idea
+
+# added by me
+.eslintcache
+
 # misc
 .DS_Store
 .env.local
