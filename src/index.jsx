@@ -7,7 +7,7 @@ import reportWebVitals from './test/reportWebVitals';
 import { fetchGameConfigData } from './redux/gameActions';
 import store from './redux/store';
 
-store.dispatch(fetchGameConfigData());
+store.dispatch(fetchGameConfigData);
 
 ReactDOM.render(
   <Provider store={store}>

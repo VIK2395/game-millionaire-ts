@@ -1,5 +1,17 @@
 import React, { useState } from 'react';
 
+// type AnswerCellProps = {
+//   answer: {
+//     answerId: string,
+//     answerText: string,
+//     isCorrect: boolean
+//   },
+//   index: number,
+//   checkAnswerAndOn: () => void,
+//   setIsDisabled: () => void,
+//   isCorrectAndShown: boolean
+// }
+
 const AnswerCell = ({ answer, index, checkAnswerAndOn, setIsDisabled, isCorrectAndShown }) => {
   const [isSelected, setIsSelected] = useState(false);
 

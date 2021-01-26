@@ -38,7 +38,7 @@ const StartPage = ({
 
   if (isInGameEnd) return <Redirect to="/gameover" />;
 
-  if (loadError.name) return <ErrorMessage error={loadError} />;
+  if (loadError) return <ErrorMessage error={loadError} />;
 
   return (
     <div className={style.wrapper}>

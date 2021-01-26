@@ -1,7 +1,7 @@
 import {
   SET_IS_INIT_LOAD,
   FORM_GAME_QUESTIONS,
-  INCREASE_SCORE,
+  SET_NEXT_SCORE,
   RESET_EARNED,
   RESET_SCORE,
   SET_ANSWER,
@@ -16,9 +16,11 @@ import {
   SET_IS_CORRECT_ANSWER_SHOWN,
 } from './actionTypes';
 
+import { IState, ActionTypes } from '../types';
+
 import shuffle from '../utils/shuffle';
 
-const initState = {
+const initState: IState = {
   redirect: {
     isInitLoad: true,
     isInGameStart: true,
@@ -26,40 +28,11 @@ const initState = {
     isInGameEnd: false,
   },
   isLoadingGameConfigData: true,
-  loadError: {},
+  loadError: null,
   score: 500,
   earned: 0,
-  answer: {
-    answerId: 'string',
-    answerText: 'string',
-    isCorrect: false,
-  },
-  question: {
-    isCorrectAnswerShown: false,
-    questionText: "Just init question. Dude, don't you know what you do?",
-    answers: [
-      {
-        answerId: 'sfjhk',
-        answerText: 'Just init answer_01',
-        isCorrect: true,
-      },
-      {
-        answerId: 'sdjfhkkj',
-        answerText: 'Just init answer_02',
-        isCorrect: false,
-      },
-      {
-        answerId: 'sduhkuhk',
-        answerText: 'Just init answer_03',
-        isCorrect: false,
-      },
-      {
-        answerId: 'sdfkhhk',
-        answerText: 'Just init answer_04',
-        isCorrect: false,
-      },
-    ],
-  },
+  answer: null,
+  question: null,
   scoreDashboard: [
     1000000,
     500000,
@@ -74,13 +47,11 @@ const initState = {
     1000,
     500,
   ],
-
   gameQuestions: [],
-
   gameConfigData: [],
 };
 
-const gameReducer = (state = initState, action) => {
+const gameReducer = (state = initState, action: ActionTypes): IState => {
   switch (action.type) {
     case SET_GAME_CONFIG_DATA:
       return {
@@ -111,7 +82,7 @@ const gameReducer = (state = initState, action) => {
         ...state,
         isLoadingGameConfigData: action.payload,
       };
-    case INCREASE_SCORE: {
+    case SET_NEXT_SCORE: {
       const scoreIndex = state.scoreDashboard.findIndex((scoreValue) => scoreValue === state.score);
       const nextScoreIndex = scoreIndex - 1;
       const nextScoreValue = state.scoreDashboard[nextScoreIndex];
@@ -123,7 +94,7 @@ const gameReducer = (state = initState, action) => {
     case SET_SCORE_QUESTION: {
       const { question } = state.gameQuestions.find(
         (question) => question.questionScore === state.score
-      );
+      )!;
       return {
         ...state,
         question: {
@@ -133,7 +104,7 @@ const gameReducer = (state = initState, action) => {
       };
     }
     case SET_ANSWER: {
-      const answer = state.question.answers.find((answer) => answer.answerId === action.payload);
+      const answer = state.question!.answers.find((answer) => answer.answerId === action.payload)!;
       return {
         ...state,
         answer,
@@ -195,7 +166,7 @@ const gameReducer = (state = initState, action) => {
       return {
         ...state,
         question: {
-          ...state.question,
+          ...state.question!,
           isCorrectAnswerShown: action.payload,
         },
       };
