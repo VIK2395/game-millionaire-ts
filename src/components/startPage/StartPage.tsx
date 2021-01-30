@@ -104,7 +104,6 @@ const mapStateToProps = (state: IState) => ({
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<IState, unknown, ActionTypes>) => ({
   setIsInitLoad: (to: boolean) => dispatch(setIsInitLoad(to)),
-  // mapDispatchToProps as function works with a plain thunk, and a thunk creator as well
   resetGameData: () => dispatch(resetGameData),
   setIsInGame: (to: boolean) => dispatch(setIsInGame(to)),
   setIsInGameEnd: (to: boolean) => dispatch(setIsInGameEnd(to)),

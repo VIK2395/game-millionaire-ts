@@ -6,7 +6,7 @@ import {
   SET_IS_IN_GAME_END,
   SET_IS_LOADING_GAME_CONFIG_DATA,
   SET_GAME_CONFIG_DATA,
-  SET_LOAD_ERROR,
+  SET_ERROR,
   SET_NEXT_SCORE,
   SET_SCORE_QUESTION,
   RESET_SCORE,
@@ -105,8 +105,8 @@ interface ISetGameConfigData {
   payload: IConfigDataQuestion[];
 }
 
-interface ISetLoadError {
-  type: typeof SET_LOAD_ERROR;
+interface ISetError {
+  type: typeof SET_ERROR;
   payload: IError;
 }
 
@@ -152,7 +152,7 @@ export type ActionTypes =
   | ISetIsInGameEnd
   | ISetIsLoadingGameConfigData
   | ISetGameConfigData
-  | ISetLoadError
+  | ISetError
   | ISetNextScore
   | ISetScoreQuestion
   | IResetScore

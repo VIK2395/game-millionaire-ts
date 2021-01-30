@@ -1,6 +1,7 @@
 import { ThunkDispatch } from 'redux-thunk';
 import { ActionTypes, IError, IConfigDataQuestion, IState, AppThunk } from '../types';
 import firebase from '../firebaseConfig/firebaseConfig';
+import isGameConfigDataValid from '../utils/isGameConfigDataValid';
 import {
   SET_IS_INIT_LOAD,
   SET_IS_IN_GAME_START,
@@ -8,7 +9,7 @@ import {
   SET_IS_IN_GAME_END,
   SET_IS_LOADING_GAME_CONFIG_DATA,
   SET_GAME_CONFIG_DATA,
-  SET_LOAD_ERROR,
+  SET_ERROR,
   SET_NEXT_SCORE,
   SET_SCORE_QUESTION,
   RESET_SCORE,
@@ -49,8 +50,8 @@ export const setGameConfigData = (data: Array<IConfigDataQuestion>): ActionTypes
   payload: data,
 });
 
-export const setLoadError = (error: IError): ActionTypes => ({
-  type: SET_LOAD_ERROR,
+export const setError = (error: IError): ActionTypes => ({
+  type: SET_ERROR,
   payload: error,
 });
 
@@ -115,13 +116,21 @@ export const fetchGameConfigData = (
       }
     })
     .then((gameConfigData) => {
+      if (isGameConfigDataValid(gameConfigData)) {
+        return gameConfigData;
+      }
+      throw new Error(
+        `Oops! Not valid gameConfigData structure. Please check the gameConfigData's structure!`
+      );
+    })
+    .then((gameConfigData) => {
       dispatch(setGameConfigData(gameConfigData));
     })
     .finally(() => {
       dispatch(setIsLoadingGameConfigData(false));
     })
     .catch((error) => {
-      dispatch(setLoadError(error));
+      dispatch(setError(error));
     });
 };
 
