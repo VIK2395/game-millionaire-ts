@@ -1,11 +1,12 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import logoHand from '../../assets/logoHand.svg';
 import style from './EndPage.module.css';
 import { setIsInGameStart, setIsInGameEnd } from '../../redux/gameActions';
+import { IState } from '../../types';
 
-const EndPage = ({
+const EndPage: React.FC<Props> = ({
   earned,
   isInitLoad,
   isInGameStart,
@@ -76,14 +77,20 @@ const EndPage = ({
   );
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: IState) => ({
   earned: state.earned,
   isInitLoad: state.redirect.isInitLoad,
   isInGameStart: state.redirect.isInGameStart,
   isInGame: state.redirect.isInGame,
 });
 
-export default connect(mapStateToProps, {
+const mapDispatchToProps = {
   setIsInGameStart,
   setIsInGameEnd,
-})(EndPage);
+};
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type Props = ConnectedProps<typeof connector>;
+
+export default connector(EndPage);

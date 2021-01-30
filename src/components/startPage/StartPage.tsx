@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
+import { ThunkDispatch } from 'redux-thunk';
 import logoHand from '../../assets/logoHand.svg';
 import style from './StartPage.module.css';
 import {
@@ -10,10 +11,11 @@ import {
   setIsInGameEnd,
   setIsInGameStart,
 } from '../../redux/gameActions';
+import { ActionTypes, IState } from '../../types';
 
 import ErrorMessage from '../common/errorMessage/ErrorMessage';
 
-const StartPage = ({
+const StartPage: React.FC<Props> = ({
   isInGame,
   isInGameEnd,
   loadError,
@@ -94,16 +96,33 @@ const StartPage = ({
   );
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: IState) => ({
   isInGame: state.redirect.isInGame,
   isInGameEnd: state.redirect.isInGameEnd,
   loadError: state.loadError,
 });
 
-export default connect(mapStateToProps, {
-  setIsInitLoad,
-  resetGameData,
-  setIsInGame,
-  setIsInGameEnd,
-  setIsInGameStart,
-})(StartPage);
+const mapDispatchToProps = (dispatch: ThunkDispatch<IState, unknown, ActionTypes>) => ({
+  setIsInitLoad: (to: boolean) => dispatch(setIsInitLoad(to)),
+  // mapDispatchToProps as function works with a plain thunk, and a thunk creator as well
+  resetGameData: () => dispatch(resetGameData),
+  setIsInGame: (to: boolean) => dispatch(setIsInGame(to)),
+  setIsInGameEnd: (to: boolean) => dispatch(setIsInGameEnd(to)),
+  setIsInGameStart: (to: boolean) => dispatch(setIsInGameStart(to)),
+});
+
+// passing mapDispatchToProps as an object works only with thunk creators, not plain thunk!!!
+// see gameActions comments
+// const mapDispatchToProps = {
+//   setIsInitLoad,
+//   resetGameData,
+//   setIsInGame,
+//   setIsInGameEnd,
+//   setIsInGameStart,
+// }
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type Props = ConnectedProps<typeof connector>;
+
+export default connector(StartPage);

@@ -1,3 +1,4 @@
+import { ThunkAction } from 'redux-thunk';
 import {
   SET_IS_INIT_LOAD,
   SET_IS_IN_GAME_START,
@@ -160,3 +161,6 @@ export type ActionTypes =
   | IFormGameQuestions
   | ISetAnswer
   | ISetIsCorrectAnswerShown;
+
+// thunk
+export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, IState, unknown, ActionTypes>;

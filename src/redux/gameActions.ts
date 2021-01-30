@@ -1,9 +1,6 @@
-import { ThunkAction, ThunkDispatch } from 'redux-thunk';
-
+import { ThunkDispatch } from 'redux-thunk';
+import { ActionTypes, IError, IConfigDataQuestion, IState, AppThunk } from '../types';
 import firebase from '../firebaseConfig/firebaseConfig';
-
-import { ActionTypes, IError, IConfigDataQuestion, IState } from '../types';
-
 import {
   SET_IS_INIT_LOAD,
   SET_IS_IN_GAME_START,
@@ -128,9 +125,7 @@ export const fetchGameConfigData = (
     });
 };
 
-type ThunkType = ThunkAction<void, IState, unknown, ActionTypes>;
-
-export const checkAnswerAndOn = (answerId: string): ThunkType => (dispatch, getState) => {
+export const checkAnswerAndOn = (answerId: string): AppThunk => (dispatch, getState) => {
   dispatch(setAnswer(answerId));
   setTimeout(() => {
     dispatch(setIsCorrectAnswerShown(true));
@@ -155,9 +150,20 @@ export const checkAnswerAndOn = (answerId: string): ThunkType => (dispatch, getS
   }, 800);
 };
 
-export const resetGameData = (): ThunkType => (dispatch) => {
+// for such a way of thunk declaration to work, mapDispatchToProps requires to be declared as function
+// for this reason Redux recommends to use thunk creators instead
+// see StartPage comments
+export const resetGameData = (dispatch: ThunkDispatch<IState, unknown, ActionTypes>): void => {
   dispatch(formGameQuestions());
   dispatch(resetScore());
   dispatch(setScoreQuestion());
   dispatch(resetEarned());
 };
+
+// for this case, thunk creator would be as follows
+// export const resetGameData = ():ThunkType => (dispatch) => {
+//   dispatch(formGameQuestions());
+//   dispatch(resetScore());
+//   dispatch(setScoreQuestion());
+//   dispatch(resetEarned());
+// };

@@ -1,6 +1,12 @@
 import React from 'react';
 
-const ScoreCell = ({ value, isActive, isPassed }) => {
+type Props = {
+  value: number;
+  isActive: boolean;
+  isPassed: boolean;
+};
+
+const ScoreCell: React.FC<Props> = ({ value, isActive, isPassed }) => {
   const classes = ['score-cell'];
 
   if (isActive) {

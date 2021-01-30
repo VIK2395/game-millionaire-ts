@@ -1,19 +1,22 @@
 import React, { useState } from 'react';
+import { IAnswer } from '../../types';
 
-// type AnswerCellProps = {
-//   answer: {
-//     answerId: string,
-//     answerText: string,
-//     isCorrect: boolean
-//   },
-//   index: number,
-//   checkAnswerAndOn: () => void,
-//   setIsDisabled: () => void,
-//   isCorrectAndShown: boolean
-// }
+type Props = {
+  answer: IAnswer;
+  index: number;
+  checkAnswerAndOn: (answerId: string) => void;
+  setIsDisabled: React.Dispatch<React.SetStateAction<boolean>>;
+  isCorrectAndShown: boolean;
+};
 
-const AnswerCell = ({ answer, index, checkAnswerAndOn, setIsDisabled, isCorrectAndShown }) => {
-  const [isSelected, setIsSelected] = useState(false);
+const AnswerCell: React.FC<Props> = ({
+  answer,
+  index,
+  checkAnswerAndOn,
+  setIsDisabled,
+  isCorrectAndShown,
+}) => {
+  const [isSelected, setIsSelected] = useState<boolean>(false);
 
   const classes = ['answer-cell'];
 
@@ -25,7 +28,7 @@ const AnswerCell = ({ answer, index, checkAnswerAndOn, setIsDisabled, isCorrectA
     classes.push('correct');
   }
 
-  const onAnswerClicked = (answerId) => {
+  const onAnswerClicked = (answerId: string): void => {
     setIsDisabled(true);
     setIsSelected(true);
     checkAnswerAndOn(answerId);
@@ -43,7 +46,7 @@ const AnswerCell = ({ answer, index, checkAnswerAndOn, setIsDisabled, isCorrectA
       >
         <path
           className="answer-cell__body"
-          tabIndex="-1"
+          tabIndex={-1}
           onClick={() => onAnswerClicked(answer.answerId)}
           d="M32.8175 5.31576C34.9762 2.29361 38.4615 0.5 42.1754 0.5H277.825C281.539 0.5 285.024 2.29361 287.183 5.31576L303.386 28L287.183 50.6842C285.024 53.7064 281.539 55.5 277.825 55.5H42.1754C38.4615 55.5 34.9762 53.7064 32.8175 50.6842L16.6145 28L32.8175 5.31576Z"
           fill="white"

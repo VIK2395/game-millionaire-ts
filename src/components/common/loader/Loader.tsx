@@ -1,7 +1,12 @@
 import React from 'react';
 import './Loader.css';
 
-const Loader = ({ isActive, children }) => {
+type LoaderProps = {
+  isActive: boolean;
+  children: React.ReactElement<any>;
+};
+
+const Loader: React.FC<LoaderProps> = ({ isActive, children }) => {
   if (isActive) {
     return (
       <div className="loader">
