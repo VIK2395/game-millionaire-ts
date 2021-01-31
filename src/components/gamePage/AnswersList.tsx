@@ -31,8 +31,8 @@ const AnswersList: React.FC<Props> = ({
 };
 
 const mapStateToProps = (state: IState) => ({
-  answers: state.question!.answers,
-  isCorrectAnswerShown: state.question!.isCorrectAnswerShown,
+  answers: state.question ? state.question.answers : [],
+  isCorrectAnswerShown: state.question ? state.question.isCorrectAnswerShown : false,
 });
 
 const mapDispatchToProps = {

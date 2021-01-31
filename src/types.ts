@@ -64,7 +64,7 @@ export interface IRedirect {
 export interface IState {
   redirect: IRedirect;
   isLoadingGameConfigData: boolean;
-  loadError: IError | null;
+  error: IError | null;
   score: number;
   earned: number;
   answer: IAnswer | null;

@@ -28,7 +28,7 @@ const initState: IState = {
     isInGameEnd: false,
   },
   isLoadingGameConfigData: true,
-  loadError: null,
+  error: null,
   score: 500,
   earned: 0,
   answer: null,
@@ -160,7 +160,7 @@ const gameReducer = (state = initState, action: ActionTypes): IState => {
     case SET_ERROR:
       return {
         ...state,
-        loadError: action.payload,
+        error: action.payload,
       };
     case SET_IS_CORRECT_ANSWER_SHOWN:
       return {

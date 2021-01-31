@@ -1,6 +1,6 @@
 const truetypeof = (elem: any): string => Object.prototype.toString.call(elem).slice(8, -1);
 
-export default function isGameConfigDataValid(gameConfigData: any): boolean {
+export default function isGameConfigDataStructureValid(gameConfigData: any): boolean {
   return (
     truetypeof(gameConfigData) === 'Array' &&
     gameConfigData.every(

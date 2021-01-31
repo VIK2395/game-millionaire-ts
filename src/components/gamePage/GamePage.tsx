@@ -45,7 +45,7 @@ const GamePage: React.FC<Props> = ({ questionText, isInitLoad, isInGameEnd, isIn
 };
 
 const mapStateToProps = (state: IState) => ({
-  questionText: state.question!.questionText,
+  questionText: state.question ? state.question.questionText : 'loading question...',
   isInitLoad: state.redirect.isInitLoad,
   isInGameEnd: state.redirect.isInGameEnd,
   isInGameStart: state.redirect.isInGameStart,

@@ -4,6 +4,8 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import logoHand from '../../assets/logoHand.svg';
 import style from './StartPage.module.css';
+import ErrorMessage from '../common/errorMessage/ErrorMessage';
+import { ActionTypes, IState } from '../../types';
 import {
   setIsInitLoad,
   resetGameData,
@@ -11,14 +13,11 @@ import {
   setIsInGameEnd,
   setIsInGameStart,
 } from '../../redux/gameActions';
-import { ActionTypes, IState } from '../../types';
-
-import ErrorMessage from '../common/errorMessage/ErrorMessage';
 
 const StartPage: React.FC<Props> = ({
   isInGame,
   isInGameEnd,
-  loadError,
+  error,
   setIsInitLoad,
   resetGameData,
   setIsInGame,
@@ -40,7 +39,7 @@ const StartPage: React.FC<Props> = ({
 
   if (isInGameEnd) return <Redirect to="/gameover" />;
 
-  if (loadError) return <ErrorMessage error={loadError} />;
+  if (error !== null) return <ErrorMessage error={error} />;
 
   return (
     <div className={style.wrapper}>
@@ -99,7 +98,7 @@ const StartPage: React.FC<Props> = ({
 const mapStateToProps = (state: IState) => ({
   isInGame: state.redirect.isInGame,
   isInGameEnd: state.redirect.isInGameEnd,
-  loadError: state.loadError,
+  error: state.error,
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<IState, unknown, ActionTypes>) => ({

@@ -1,7 +1,8 @@
 import { ThunkDispatch } from 'redux-thunk';
 import { ActionTypes, IError, IConfigDataQuestion, IState, AppThunk } from '../types';
 import firebase from '../firebaseConfig/firebaseConfig';
-import isGameConfigDataValid from '../utils/isGameConfigDataValid';
+import isGameConfigDataStructureValid from '../utils/isGameConfigDataStructureValid';
+import isAllScoreQuestionsAvailable from '../utils/isAllScoreQuestionsAvailable';
 import {
   SET_IS_INIT_LOAD,
   SET_IS_IN_GAME_START,
@@ -91,46 +92,51 @@ export const setIsCorrectAnswerShown = (to: boolean): ActionTypes => ({
 });
 
 export const fetchGameConfigData = (
-  dispatch: ThunkDispatch<IState, unknown, ActionTypes>
+  dispatch: ThunkDispatch<IState, unknown, ActionTypes>,
+  getState: () => IState
 ): void => {
   const firestore = firebase.firestore();
-  const docRef = firestore.collection('gameConfigData').doc('docConfig');
+  const docRef = firestore.collection('gameConfigData').doc('document');
   docRef
     .get()
     .then((doc) => {
       try {
         if (!doc.exists)
-          throw new Error(
-            "Oops! No 'docConfig' document in the database 'gameConfigData' collection!"
-          );
+          throw new Error("Oops! No 'document' in the database 'gameConfigData' collection!");
         if (!doc.data()!.config)
-          throw new Error("Oops! No 'config' field in the 'docConfig' document of the database!");
+          throw new Error("Oops! No 'config' in the 'document' of the database!");
         return JSON.parse(doc.data()!.config);
         // return JSON.parse("{ bad json o_O }");
       } catch (error) {
         if (error.name === 'SyntaxError') {
-          throw new Error("Oops! Game JSON 'config' badly formated. Please check the file!");
+          throw new Error('Oops! The game JSON config file badly formated. Please check the file!');
         } else {
           throw error;
         }
       }
     })
     .then((gameConfigData) => {
-      if (isGameConfigDataValid(gameConfigData)) {
+      if (isGameConfigDataStructureValid(gameConfigData)) {
+        return gameConfigData;
+      }
+      throw new Error('Oops! Not valid the game config data structure. Please check the data!');
+    })
+    .then((gameConfigData) => {
+      if (isAllScoreQuestionsAvailable(getState().scoreDashboard, gameConfigData)) {
         return gameConfigData;
       }
       throw new Error(
-        `Oops! Not valid gameConfigData structure. Please check the gameConfigData's structure!`
+        'Oops! Not all appropriate score questions are in the game config data. Please check the data!'
       );
     })
     .then((gameConfigData) => {
       dispatch(setGameConfigData(gameConfigData));
     })
-    .finally(() => {
-      dispatch(setIsLoadingGameConfigData(false));
-    })
     .catch((error) => {
       dispatch(setError(error));
+    })
+    .finally(() => {
+      dispatch(setIsLoadingGameConfigData(false));
     });
 };
 
